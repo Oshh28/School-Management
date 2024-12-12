@@ -13,8 +13,8 @@ int signupPage();
 int loginPage();
 int studentMenu();
 int profMenu();
-void professorChoice();  // Added declaration
-void studentChoice();    // Added declaration
+void professorChoice();
+void studentChoice();
 
 // Function for professor menu	
 void profile_detailsPage();
