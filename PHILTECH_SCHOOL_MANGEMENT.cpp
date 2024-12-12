@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-#include <windows.h>
-#include <conio.h>
-#include <unistd.h>
+#include <stdio.h> // Storage library
+#include <stdlib.h> // for system clear
+#include <ctype.h> // loading process other syntax
+#include <string.h> // for strcpy, strcat
+#include <windows.h> // give access for windows API
+#include <conio.h> // for getch or 1 tap
+#include <unistd.h> // for syntax sleep
 #include <time.h>
 
 // Function declarations
@@ -21,6 +21,7 @@ void profile_detailsPage();
 void aboutusPage();
 void mark_attendancePage();
 void classroom_professorPage();
+void Campus_Map();
 
 // Function for student menu
 void profile_detailsPage2();
@@ -35,6 +36,7 @@ void change_passPage();
 void change_emailPage2();
 void edit_numberPage2();
 void change_passPage2();
+// ==============================================================
 
 // Storage for Prof attendance
 char date[15];
@@ -552,7 +554,6 @@ void edit_numberPage () { //                                                    
     
     if (strcmp(loginPassW3, passW) == 0) {
         printf("\t\tContact number updated successfully.\n\n");
-    
 		printf("\t\tPress any key to continue...");
     	getch();
 		profile_detailsPage();
@@ -669,7 +670,6 @@ while (1) {
 		}   
 	}
 }
-    
 }
 
 void prof_attendancePage () {
@@ -771,6 +771,9 @@ Classroom_Management:
 		case '2':
 			goto Mark_Attendance;
 			break;
+		case '3':
+			Campus_Map ();
+			break;
 		case '9':
 			profMenu();
 			break;
@@ -841,17 +844,119 @@ Mark_Attendance:
 	
 }
 
+void Campus_Map () {
+while (1) {
+	char user1;
+	system("cls");
+	Stud_Classroom_display ();
+	printf("\t\t\t[ 9 ] back\n");
+	printf("\t\t\t ___---____---_____-----____----_____---____-------_____--_----_\n");
+	printf("\t\t\t|  ___________________________________________________________  |\n");
+	printf("\t\t\t|:|                     | TECHLAB  |                          |:|\n");
+	printf("\t\t\t|:|       PANTRY     ___|_____     |                          |:|\n");
+	printf("\t\t\t|:|_________________|___|     |    |          COMPLAB 2       |:|\n");
+	printf("\t\t\t|:|                  ___|     |    |                          |:|\n");
+	printf("\t\t\t|:|       ADMIN     |___|     |_   |   ___                  __|:|\n");
+	printf("\t\t\t|:|____________     ____|     |_|__|__|___|________________|__|:|\n");
+	printf("\t\t\t|:|                     | -----  EXIT HALLWAY <------         |:|\n");
+	printf("\t\t\t|:|   RECEPTION AREA    ||   --->   ENTRANCE   ------>        |:|\n");
+	printf("\t\t\t|:|_____________________||  | _________________________       |:|\n");
+	printf("\t\t\t|:|   <---- EXIT --------   ||__|                   |__| FIRE |:|\n");
+	printf("\t\t\t|:|<        HALLWAY         ||                         | EXIT |:|\n");
+	printf("\t\t\t|:|   ----> ENTRANCE-------  |        COMPLAB 1        |      |:|\n");
+	printf("\t\t\t|:|__________________________|_________________________|______|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");	
+	printf("\t\t\t__-____--____------__--____------___----_____---_---_---____-__\n");
+    printf("\t\t\t|  ___________________________________________________________  |\n");	
+	printf("\t\t\t|:|                      SECOND FLOOR                         |:|\n");
+	printf("\t\t\t|:|                                                           |:|\n");
+	printf("\t\t\t|:|                    LEGENO: ENTRANCE (>)                   |:|\n");
+	printf("\t\t\t|:|                    LEGENO: EXIT     (<)                   |:|\n");
+	printf("\t\t\t|:|___________________________________________________________|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");
+	
+	printf("\t\t\t __-____--____------__--____------___----_____---_---_---____-__ \n");
+	printf("\t\t\t|  ___________________________________________________________  |\n");
+	printf("\t\t\t|:|  CR M__|__CR FM  |   RECORDS ROOM   |                     |:|\n");
+	printf("\t\t\t|:|_____|__|__|______|_____          ___|___       301        |:|\n");
+	printf("\t\t\t|:|  ______|_______        |________|___|___|_________________|:|\n");
+	printf("\t\t\t|:|          <-------------------    HALLWAY    ------------- |:|\n");
+	printf("\t\t\t|:|        |   -------------------------------------------->  |:|\n");
+	printf("\t\t\t|:|      __|__      __________________________________________|:|\n");
+	printf("\t\t\t|:|     |_____|    | |___|             |      |__| |___|      |:|\n");
+	printf("\t\t\t|:|     |_____|    |                   |  CLINIC   |  ADMIN   |:|\n");
+	printf("\t\t\t|:|     |_____|    |      LIBRARY      |  GUIDANCE |  OFFICE  |:|\n");
+	printf("\t\t\t|:|     |_____|    |___________________|___________|__________|:|\n");
+	printf("\t\t\t|:|                               FIRE EXIT                   |:|\n");
+	printf("\t\t\t|:|___________________________________________________________|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");
+	printf("\t\t\t __-____--____------__--____------___----_____---_---_---____-__\n");
+    printf("\t\t\t|  ___________________________________________________________  |\n");	
+	printf("\t\t\t|:|                      THIRD FLOOR                          |:|\n");
+	printf("\t\t\t|:|                                                           |:|\n");
+	printf("\t\t\t|:|                    LEGENO: ENTRANCE (>)                   |:|\n");
+	printf("\t\t\t|:|                    LEGENO: EXIT     (<)                   |:|\n");
+	printf("\t\t\t|:|___________________________________________________________|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");
+	
+	printf("\t\t\t __-____--____------__--____------___----_____---_---_---____-__\n");
+	printf("\t\t\t|  ___________________________________________________________  |\n");
+	printf("\t\t\t|:|            | CR MALE |     CR    |       |       |        |:|\n");
+	printf("\t\t\t|:|            |       __|__ FEMALE  |       |       |        |:|\n");
+	printf("\t\t\t|:|       _____|______|__|__|_ ______|FACULTY| 402   | 403    |:|\n");
+	printf("\t\t\t|:|       |          ______|______   |___    |___    |___     |:|\n");
+	printf("\t\t\t|:|       |                          |___|___|___|___|___|____|:|\n");
+	printf("\t\t\t|:|       |                        <--------------------------|:|\n");
+	printf("\t\t\t|:|       |                      | ---------- HAllWAY --------|:|\n");
+	printf("\t\t\t|:|       |                      ||  ________ _______ ________|:|\n");
+	printf("\t\t\t|:|       |  ---------------->   || |        |__|    |__|     |:|\n");
+	printf("\t\t\t|:|       ||  <-------------  |  || |        |       |        |:|\n");
+	printf("\t\t\t|:|       || |              ^ |  || |        | 405   | 404    |:|\n");
+	printf("\t\t\t|:|_______|| | ________     | |  || |________|_______|________|:|\n");
+	printf("\t\t\t|:|   |   || ||   |    |    | V  V|                           |:|\n");
+	printf("\t\t\t|:|   |___|| ||___|    |    ________                          |:|\n");
+	printf("\t\t\t|:| 411   || ||   406  |   |________|                         |:|\n");
+	printf("\t\t\t|:|_______|| ||________|   |________|                         |:|\n");
+	printf("\t\t\t|:|   |   || ||   |    |   |________|                         |:|\n");
+	printf("\t\t\t|:|   |___|| ||___|    |   |________|                         |:|\n");
+	printf("\t\t\t|:| 410   || ||   407  |   |________|                         |:|\n");    
+	printf("\t\t\t|:|_______|| ||________|                                      |:|\n");
+	printf("\t\t\t|:|    |  || ||  |     |                                      |:|\n");
+	printf("\t\t\t|:| 409|__|| ||__|408  |                                      |:|\n");
+	printf("\t\t\t|:|       || v|        |                                      |:|\n");
+	printf("\t\t\t|:|_______|___|________|______________________________________|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");
+	printf("\t\t\t __-____--____------__--____------___----_____---_---_---____-__\n");
+    printf("\t\t\t|  ___________________________________________________________  |\n");	
+	printf("\t\t\t|:|                      FOURTH FLOOR                         |:|\n");
+	printf("\t\t\t|:|                                                           |:|\n");
+	printf("\t\t\t|:|                    LEGENO: ENTRANCE (>)                   |:|\n");
+	printf("\t\t\t|:|                    LEGENO: EXIT     (<)                   |:|\n");
+	printf("\t\t\t|:|___________________________________________________________|:|\n");
+	printf("\t\t\t|__-____--____------__--____------___----_____---_---_---____-__|\n\n");
+	
+	user1 = getch();
+    if (user1 == '9') {
+    	if (strcmp(roleChoice, "Professor") == 0) {
+    		classroom_professorPage();
+		} else if (strcmp(roleChoice, "Student") == 0) {
+			classroom_studentPage();
+		}   
+	}
+	}
+}
+
 // Professor menu
 int profMenu() {
 	
 	char userprofMenu;
 	while (1) {
 	system("cls");
-    printf("---------\n");
+    printf(" _______\n");
 	printf("|       | Name: %s\n", userN);
 	printf("| [ 9 ] | Position: Professor of Philtech\n");
-	printf("|       | Major Subject: %s\n", profMajor);
-	printf("---------\n");
+	printf("|_______| Major Subject: %s\n", profMajor);
+	
     printf("\n=====================================================================================================================\n");
     printf("*                                              Professor Menu Page                                                  *\n");
     printf("=====================================================================================================================\n\n");
@@ -1795,7 +1900,7 @@ BTVTED_EOG_receipt:
     printf(" -----------------------------------------------------------------------------------------------\n");
     printf("|  TLE123   | Home Economics Literacy     | Ms.Tesoro       | 93  | 94  | 95  | 96  |  PASSED   |\n");
     printf(" -----------------------------------------------------------------------------------------------\n");
-    printf("|   GE123   | Purposive Communication     | Ms.Arceño       | 89  | 91  | 92  | 93  |  PASSED   |\n");
+    printf("|   GE123   | Purposive Communication     | Ms.Arce?o       | 89  | 91  | 92  | 93  |  PASSED   |\n");
     printf(" -----------------------------------------------------------------------------------------------\n");
     printf("|   GE124   | Readings in the PH History  | Mr.Nori         | 91  | 93  | 94  | 95  |  PASSED   |\n");
     printf(" -----------------------------------------------------------------------------------------------\n");
@@ -1879,6 +1984,9 @@ Classroom_Management:
 			} else if (strcmp(enrollProgram, "BTVTED Major in Food Service Management") == 0) {
 				goto Class_SubEnrolled_BTVTED;
 			}
+			break;
+		case '3':
+			Campus_Map ();
 			break;
 		case '9':
 			studentMenu();
