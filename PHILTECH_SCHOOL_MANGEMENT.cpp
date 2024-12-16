@@ -89,7 +89,7 @@ char eogReason2 [1000];
 
 char markSection [15];
 char userLevel[50]; // storage for user's college level
-char profMajor[50]; // storage for user's major subject
+char profMajor[50] = "Select Department"; // storage for user's major subject
 
 void getCurrentDate(char *buffer, size_t size) {
     time_t t;
@@ -208,15 +208,74 @@ void changeAccountDisplay() {
     printf("=====================================================================================================================\n");
 }
 
-void gotoxy(int x, int y)
-{
+// File handling functions
+void saveUserToFile() {
+    FILE *file = fopen("users_info.txt", "a"); // Open file in appended mode
+    if (file == NULL) {
+        printf("\t\t\t(System): Error opening database file!\n");
+        return;
+    }
+    
+    // Save user data in format: email|password|role|firstname|lastname|birthday|contact|username|profMajor
+    fprintf(file, "%s|%s|%s|%s|%s|%s|%s|%s|%s\n", 
+        email, passW, roleChoice, firstN, lastN, birthD, contactN, userN, profMajor);
+    
+    fclose(file);
+}
+
+int checkUserExists(const char *checkEmail) {
+    FILE *file = fopen("users_info.txt", "r"); // Open file in read mode
+    if (file == NULL) {
+        return 0; // Check if file doesn't exist means user is unique
+    }
+    
+    char line[500];
+    char storedEmail[50];
+    
+    while (fgets(line, sizeof(line), file)) {
+        sscanf(line, "%[^|]", storedEmail);
+        if (strcmp(storedEmail, checkEmail) == 0) {
+            fclose(file);
+            return 1; // Email exists
+        }
+    }
+    
+    fclose(file);
+    return 0; // Email is unique
+}
+
+int verifyLogin(const char *loginEmail, const char *password, char *role, char *major) {
+    FILE *file = fopen("users_info.txt", "r");
+    if (file == NULL) { 
+        return 0; // Login failed
+    }
+    
+    char line[500];
+    char storedEmail[50], storedPassword[50], storedRole[20], storedMajor[50];
+    
+    while (fgets(line, sizeof(line), file)) {
+        sscanf(line, "%[^|]|%[^|]|%[^|]|%*[^|]|%*[^|]|%*[^|]|%*[^|]|%*[^|]|%[^\n]", 
+            storedEmail, storedPassword, storedRole, storedMajor);
+            
+        if (strcmp(storedEmail, loginEmail) == 0 && strcmp(storedPassword, password) == 0) {
+            strcpy(role, storedRole);
+            strcpy(major, storedMajor);
+            fclose(file);
+            return 1; // Login successful
+        }
+    }
+    
+    fclose(file);
+    return 0; // Login failed
+}
+
+void gotoxy(int x, int y) {
     COORD coord;
     coord.X = x;
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-void hidecursor()
-{
+void hidecursor() {
    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
    CONSOLE_CURSOR_INFO info;
    info.dwSize = 100;
@@ -305,6 +364,14 @@ account_info:
     printf("\t\t\t -----------------------------------------------------------\n");
     printf("\t\t\t| Email: ");
     scanf("%s", email);
+    
+    // Check if email already exists
+    if (checkUserExists(email)) {
+        printf("\t\t\t(System): Email already exists! Please choose another.\n");
+        printf("\t\t\tPress any key to try again...");
+        getch();
+        goto account_info;
+    }
     printf("\t\t\t -----------------------------------------------------------\n");
 
     printf("\t\t\t -----------------------------------------------------------\n");
@@ -318,6 +385,8 @@ account_info:
     printf("\t\t\t -----------------------------------------------------------\n");
     
 position_Choices:
+	char chooseStatus;
+	int showOptions = 0;
     system("cls");
     printf("\n\n\n\n\n");
     createAccountDisplay();
@@ -333,25 +402,73 @@ position_Choices:
     
     switch (roleC) {
         case '1':
+        	while (1) {
+        	system("cls");
         	printf("\n\n\n\n\n");
         	createAccountDisplay();
         	strcpy(roleChoice, "Professor");
-        	printf("\t\t\tEnter your major subject:\n");
-        	printf("\t\t\t -----------------------------------------------------------\n");
-    		printf("\t\t\t| Subject: ");
-    		scanf("%s", profMajor);
-    		printf("\t\t\t -----------------------------------------------------------\n");
+        	printf("\t\t\tDepartment:\n");
+            printf("\t\t\t -----------------------------------------------------------\n");
+            printf("\t\t\t| %-51s [4] ^ |\n", profMajor);
+            printf("\t\t\t -----------------------------------------------------------\n");
+            
+            if (showOptions) {
+            	printf("\t\t\t -----------------------------------------------------------\n");
+            	printf("\t\t\t|  [ q ] Computer Science Department                        |\n");
+            	printf("\t\t\t|  [ w ] Office Administration Department                   |\n");
+            	printf("\t\t\t|  [ e ] Teacher Education Department                       |\n");
+            	printf("\t\t\t|  [ r ] General Education Department                       |\n");
+            	printf("\t\t\t -----------------------------------------------------------\n");
+        	}
+        	
+        	printf("\n\n\n");
+       	    printf("                                                                   -----------------\n");
+        	printf("                                                                  |   [f] Finish    |\n");
+        	printf("                                                                   -----------------\n");
+        	
+        	chooseStatus = getch();
+        
+        	if (chooseStatus == '4') {
+            showOptions = !showOptions;
+        	} else if (chooseStatus == 'f') {
+        		if (strcmp(profMajor, "Select Department") == 0) {
+                printf("\n\n");
+                printf("\t\t\t(System): Please select a department first!\n");
+                printf("\t\t\tPress any key to continue...");
+                getch();
+                continue;
+            	}
+            	goto login_success;
+        	}
+        	
+        	if (showOptions) {
+            switch (chooseStatus) {
+                case 'q':
+                    strcpy(profMajor, "Computer Science Department");
+                    showOptions = 0;
+                    break;
+                case 'w':
+                    strcpy(profMajor, "Office Administration Department");
+                    showOptions = 0;
+                    break;
+                case 'e':
+                    strcpy(profMajor, "Teacher Education Department");
+                    showOptions = 0;
+                    break;
+                case 'r':
+                    strcpy(profMajor, "General Education Department");
+                    showOptions = 0;
+                    break;
+            		}
+        		}
+        	}
+        	
     		goto login_success;
             break;
         case '2':
         	printf("\n\n\n\n\n");
         	createAccountDisplay();
         	strcpy(roleChoice, "Student");
-            printf("\t\t\tEnter your college level:\n");
-        	printf("\t\t\t -----------------------------------------------------------\n");
-    		printf("\t\t\t| Level: ");
-    		scanf(" %[^\n]", userLevel);
-    		printf("\t\t\t -----------------------------------------------------------\n");
     		goto login_success;
             break;
         default:
@@ -365,16 +482,20 @@ position_Choices:
         }
         
 login_success:
+	// Save user data to file
+    saveUserToFile();
+    
     printf("\n\t\t\tAccount created successfully!\n\n");
     printf("\t\t\tPress any key to continue...");
     getch();
     
-    return 0; // Return to main loop
+    return 0;
 }
 
 // Login page
 int loginPage() {
-    char loginUserN[50], loginPassW[50];
+    char loginEmail[50], loginPassW[50];
+    char storedRole[20], storedMajor[50];
 
     system("cls");
     printf("\n\n\n\n\n");
@@ -382,7 +503,7 @@ int loginPage() {
     printf("\t\t\tEnter your username:\n");
     printf("\t\t\t -----------------------------------------------------------\n");
     printf("\t\t\t| Username: ");
-    scanf("%s", loginUserN);
+    scanf("%s", loginEmail);
     printf("\t\t\t -----------------------------------------------------------\n");
     printf("\t\t\tEnter your password:\n");
     printf("\t\t\t -----------------------------------------------------------\n");
@@ -390,26 +511,26 @@ int loginPage() {
     scanf("%s", loginPassW);
     printf("\t\t\t -----------------------------------------------------------\n");
 
-    // Check if login credentials match
-    if (strcmp(loginUserN, userN) == 0 && strcmp(loginPassW, passW) == 0) {
-    	if (strcmp(roleChoice, "Professor") == 0) {
-    		printf("\n\n");
-    		printf("\t\t\tSuccessfully logged in as %s professor!\n\n", profMajor);
-    		printf("\t\t\tPress any key to continue...");
-    		getch();
-    		profMenu();
-		} else if (strcmp(roleChoice, "Student") == 0) {
-			printf("\n\n");
-    		printf("\t\t\tSuccessfully logged in as %s student!\n\n", userLevel);
-    		printf("\t\t\tPress any key to continue...");
-    		getch();
-			studentMenu();
-		}   
+    // Verify login credentials from file
+    if (verifyLogin(loginEmail, loginPassW, storedRole, storedMajor)) {
+        if (strcmp(storedRole, "Professor") == 0) {
+            printf("\n\n");
+            printf("\t\t\tSuccessfully logged in as professor!\n\n");
+            printf("\t\t\tPress any key to continue...");
+            getch();
+            profMenu();
+        } else if (strcmp(storedRole, "Student") == 0) {
+            printf("\n\n");
+            printf("\t\t\tSuccessfully logged in as student\n\n");
+            printf("\t\t\tPress any key to continue...");
+            getch();
+            studentMenu();
+        }
     } else {
-    	system("cls");
-    	printf("\n\n\n\n\n");
+        system("cls");
+        printf("\n\n\n\n\n");
         loginDisplay();
-        printf("\t\t\t(System): Invalid username or password. Please try again.\n\n");
+        printf("\t\t\t(System): Invalid email or password. Please try again.\n\n");
         printf("\t\t\tPress any key to continue...");
         getch();
         loginPage();
@@ -751,22 +872,30 @@ Classroom_Management:
 	system("cls");
 	Stud_Classroom_display ();
 	printf("[ 9 ] back\n");
-	printf("\n\n\n\n\n\n\n\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 1 ] Weekly Schedule          |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 2 ] Mark Attendance          |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 3 ] Campus Map               |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
+	printf("\n\n\n\n\n\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 1 ] Weekly Schedule          |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 2 ] Mark Attendance          |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 3 ] Campus Map               |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
 	
 	classUser = getch();
 	
 	switch (classUser) {
 		case '1':
-			goto Weekly_Schedule;
+			if (strcmp(profMajor, "Computer Science Department") == 0) {
+				goto Weekly_schedule_BSCS; 
+			} else if (strcmp(profMajor, "Office Administration Department") == 0) {
+				goto Weekly_schedule_BSOA;
+			} else if (strcmp(profMajor, "Teacher Education Department") == 0) {
+				goto Weekly_schedule_BTVTED;
+			} else if (strcmp(profMajor, "General Education Department") == 0) {
+				goto Weekly_schedule_General;
+			}
 			break;
 		case '2':
 			goto Mark_Attendance;
@@ -782,11 +911,139 @@ Classroom_Management:
 		    break;
 	}
 	
-Weekly_Schedule:
-	system("cls");
-	Stud_Classroom_display ();
-	printf("To be Announce\n");
+Weekly_schedule_BSCS:
+	char user1;
+	while (1) {
+		system("cls");
+		Stud_Classroom_display ();
+		printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|                                                       WEEKLY SCHEDULE                                            [ 9 ] back |\n");
+        printf("|                                                 DEPARMENT: Computer Science                                                 |\n");
+        printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|      TIME       |     MONDAY      |     TUESDAY     |    WEDNESDAY    |    THURSDAY     |      FRIDAY     |     SATURDAY    |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        printf("|    7:00-8:00    |_________________|_________________|                 |_________________| CC123(BSCS3M1)  |_________________|\n");
+        printf("|    8:00-8:45    |                 |                 |  CC123(BSCS1M1) |                 |    COMPLAB 2    |                 |\n");
+        printf("|-----------------+-----------------+   CC112(1M1)    +    COMPLAB 2    +-----------------+-----------------+                 |\n");
+        printf("|    9:00-10:00   |_________________|   ROOM 406      |                 |                 |_________________|_________________|\n");
+        printf("|   10:00-10:45   |                 |                 |                 |  CC112(BSCS2M1) |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+    ROOM 405     +-----------------+                 |\n");
+        printf("|   11:15-12:00   |_________________|_________________|                 |                 |_________________|  CC112(BSCS3M1) |\n");
+        printf("|    12:00-1:00   |                 |                 |  CC123(BSCS2M1) |_________________|                 |    ROOM 408     |\n");
+        printf("|-----------------+-----------------+-----------------+    COMPLAB 2    +-----------------+-----------------+                 |\n");
+        printf("|    1:00-2:00    |_________________|_________________|                 |_________________|_________________|_________________|\n");
+        printf("|    2:00-2:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------|\n");
+        printf("|    3:00-4:00    |_________________|_________________|_________________|_________________|_________________|_________________|\n");
+        printf("|    4:00-4:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        
+        user1 = getch();
+		if (user1 == '9') {
+		goto Classroom_Management;
+		}
+	}
 	
+Weekly_schedule_BSOA:
+	char user2;
+	while (1) {
+		system("cls");
+		Stud_Classroom_display ();
+		printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|                                                       WEEKLY SCHEDULE                                            [ 9 ] back |\n");
+        printf("|                                              DEPARMENT: Office Administration                                               |\n");
+        printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|      TIME       |     MONDAY      |     TUESDAY     |    WEDNESDAY    |    THURSDAY     |      FRIDAY     |     SATURDAY    |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        printf("|    7:00-8:00    |_________________|                 |                 |                 |_________________|                 |\n");
+        printf("|    8:00-8:45    |                 |                 |                 | OACC124(BSOA3M1)|                 |                 |\n");
+        printf("|-----------------+-----------------+ OACC124(BSOA1M1)+ OACC124(BSOA2M1)+    ROOM 405     +-----------------+ OACC123(BSOA1M1)|\n");
+        printf("|    9:00-10:00   |_________________|    ROOM 403     |    ROOM 403     |                 |_________________|    COMPLAB1     |\n");
+        printf("|   10:00-10:45   |                 |                 |                 |                 |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+                 +-----------------+-----------------+-----------------|\n");
+        printf("|   11:15-12:00   |_________________|_________________|_________________| OACC123(BSOA3M1)|                 |                 |\n");
+        printf("|    12:00-1:00   |                 |                 |                 |    LIBRARY      | OACC123(BSOA2M1)|                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+    COMPLAB1     +-----------------|\n");
+        printf("|    1:00-2:00    |_________________|_________________|_________________|_________________|_________________|_________________|\n");
+        printf("|    2:00-2:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------|\n");
+        printf("|    3:00-4:00    |_________________|_________________|_________________|_________________|_________________|_________________|\n");
+        printf("|    4:00-4:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        
+        user2 = getch();
+		if (user2 == '9') {
+		goto Classroom_Management;
+		}
+	}
+	
+Weekly_schedule_BTVTED:
+	char user3;
+	while (1) {
+		system("cls");
+		Stud_Classroom_display ();
+		printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|                                                       WEEKLY SCHEDULE                                            [ 9 ] back |\n");
+        printf("|                                               DEPARTMENT: Teacher Education                                                 |\n");
+        printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+        printf("|      TIME       |     MONDAY      |     TUESDAY     |    WEDNESDAY    |    THURSDAY     |      FRIDAY     |     SATURDAY    |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        printf("|    7:00-8:00    |_________________|                 |                 |                 |FCC124(BTVTED3M1)|                 |\n");
+        printf("|    8:00-8:45    |                 |                 |FCC124(BTVTED1M1)|TLE123(BTVTED3M1)|     ROOM 103    |                 |\n");
+        printf("|-----------------+                 +FCC123(BTVTED1M1)+    ROOM 104     +     LIBRARY     +-----------------+TLE123(BTVTED1M1)|\n");
+        printf("|    9:00-10:00   |FCC124(BTVTED2M1)|     ROOM 403    |_________________|_________________|                 |    ROOM 405     |\n");
+        printf("|   10:00-10:45   |    ROOM 407     |                 |                 |                 |TLE123(BTVTED2M1)|                 |\n");
+        printf("|-----------------+                 +                 +FCC123(BTVTED3M1)+FCC123(BTVTED2M1)+     ROOM 408    +-----------------|\n");
+        printf("|   11:15-12:00   |_________________|_________________|    ROOM 409     |    ROOM 104     |                 |_________________|\n");
+        printf("|    12:00-1:00   |                 |                 |                 |                 |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------|\n");
+        printf("|    1:00-2:00    |_________________|_________________|_________________|_________________|_________________|                 |\n");
+        printf("|    2:00-2:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("|-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+                 |\n");
+        printf("|    3:00-4:00    |_________________|_________________|_________________|_________________|_________________|_________________|\n");
+        printf("|    4:00-4:45    |                 |                 |                 |                 |                 |                 |\n");
+        printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+        
+        user3 = getch();
+		if (user3 == '9') {
+		goto Classroom_Management;
+		}
+	}
+	
+Weekly_schedule_General:
+	char user4;
+	while (1) {
+		system("cls");
+		Stud_Classroom_display ();
+		printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+	    printf("|                                                       WEEKLY SCHEDULE                                            [ 9 ] back |\n");
+	    printf("|                                                 DEPARMENT: General Education                                                |\n");
+	    printf("+-----------------------------------------------------------------------------------------------------------------------------+\n");
+	    printf("|     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |\n");
+	    printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+	    printf("|      TIME       |     MONDAY      |     TUESDAY     |    WEDNESDAY    |    THURSDAY     |      FRIDAY     |     SATURDAY    |\n");
+	    printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+	    printf("|    7:00-8:00    |_________________|PATHFIT1(BSCS2M1)| PATHFIT1(BTVTED)|_________________|PATHFIT1(BSCS1M1)|_________________|\n");
+	    printf("|    8:00-8:45    |                 |     ROOM 407    |    ROOM 104     |                 |    ROOM 104     |                 |\n");
+	    printf("|-----------------+-----------------+                 +-----------------+-----------------+-----------------+-----------------|\n");
+	    printf("|    9:00-10:00   |_________________|                 |                 | GE123(BSCS3M1)  | GE123(BSOA2M1)  |_________________|\n");
+	    printf("|   10:00-10:45   |                 |                 | FIL123(BSOA1M1) |     ROOM 408    |   ROOM 408      |                 |\n");
+	    printf("|-----------------+-----------------+-----------------+    ROOM 104     +                 +                 + GE123(BTVTED1M1)|\n");
+	    printf("|   11:15-12:00   |_________________|  NSTP1(BSOA2M1) |_________________|_________________|_________________|     ROOM 410    |\n");
+	    printf("|    12:00-1:00   |                 |     ROOM 407    |                 |                 |                 |                 |\n");
+	    printf("|-----------------+-----------------+                 +-----------------+-----------------+-----------------+-----------------|\n");
+	    printf("|    1:00-2:00    |_________________|                 | NSTP1(BTVTED3M1)| GE113(BSOA3M1)  | GE113(BSCS2M1)  |                 |\n");
+	    printf("|    2:00-2:45    |                 |                 |    ROOM 405     |   ROOM 408      |     ROOM 408    | GE113(BTVTED1M1)|\n");
+	    printf("|-----------------+-----------------+-----------------+                 +                 +                 +     ROOM 410    |\n");
+	    printf("|    3:00-4:00    |_________________|_________________|_________________|_________________|                 |_________________|\n");
+ 	    printf("|    4:00-4:45    |                 |                 |                 |                 |                 |                 |\n");
+	    printf("+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+-----------------+\n");
+	    
+	    user4 = getch();
+		if (user4 == '9') {
+		goto Classroom_Management;
+		}
+	}
 Mark_Attendance:
 	system("cls");
 	Stud_Classroom_display ();
@@ -955,7 +1212,7 @@ int profMenu() {
     printf(" _______\n");
 	printf("|       | Name: %s\n", userN);
 	printf("| [ 9 ] | Position: Professor of Philtech\n");
-	printf("|_______| Major Subject: %s\n", profMajor);
+	printf("|_______| Deparment: %s\n", profMajor);
 	
     printf("\n=====================================================================================================================\n");
     printf("*                                              Professor Menu Page                                                  *\n");
@@ -1953,16 +2210,16 @@ Classroom_Management:
 	system("cls");
 	printf("[ 9 ] back\n");
 	Stud_Classroom_display ();
-	printf("\n\n\n\n\n\n\n\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 1 ] Weekly Schedule          |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 2 ] Enrolled Subjects        |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
-	printf("\t\t\t\t\t|        [ 3 ] Campus Map               |\n");
-	printf("\t\t\t\t\t ---------------------------------------\n");
+	printf("\n\n\n\n\n\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 1 ] Weekly Schedule          |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 2 ] Enrolled Subjects        |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t ---------------------------------------\n");
+	printf("\t\t\t\t|        [ 3 ] Campus Map               |\n");
+	printf("\t\t\t\t ---------------------------------------\n");
 	
 	classUser = getch();
 	
