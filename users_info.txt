@@ -1,3 +1,0 @@
-chris|123|Student|Chris|Rosal|07/28/06|chris@gmail.com|09077563262|N/A
-Chris@gmail.com|123|Student|Chrizyruze|Rosal|07/28/06|09077562362|Oshh28|N/A
-Jaybee@gmail.com|123|Professor|Jhavie|Caballero|05/15/06|123456789|Kupal|Computer Science Department
