@@ -2528,23 +2528,70 @@ void markAttendance_Faculty() {
 
 // Given student data for registrar
 void add_test_data() {
-    strcpy(students[0].id, "CS-102345");
-    strcpy(students[0].name, "John, Smith");
+    strcpy(students[0].id, "OA-102345");
+    strcpy(students[0].name, "Ignacio, Cristine");
     strcpy(students[0].status, "Active");
     students[0].attendance = 90;
     strcpy(students[0].schedule, "Regular class");
     students[0].balance = 2000.0;
     
-    strcpy(students[1].id, "CS-123456");
-    strcpy(students[1].name, "Rosal, Chrizyruze");
+    strcpy(students[1].id, "ED-123456");
+    strcpy(students[1].name, "Mondigo, Danilo");
     strcpy(students[1].status, "Active");
     students[1].attendance = 90;
     strcpy(students[1].schedule, "Regular class");
     students[1].balance = 2000.0;
     
-    // Add more test students...
-    // (keeping the same test data as your original code)
-    totalStudents = 2; // Start with just one test student
+    strcpy(students[2].id, "CS-119395");
+    strcpy(students[2].name, "Yabut, Lorenz");
+    strcpy(students[2].status, "Active");
+    students[2].attendance = 90;
+    strcpy(students[2].schedule, "Regular class");
+    students[2].balance = 2000.0;
+    
+    strcpy(students[3].id, "CS-491853");
+    strcpy(students[3].name, "Caballero, Jhavie");
+    strcpy(students[3].status, "Active");
+    students[3].attendance = 90;
+    strcpy(students[3].schedule, "Regular class");
+    students[3].balance = 2000.0;
+    
+    strcpy(students[4].id, "CS-362494");
+    strcpy(students[4].name, "Tuyor, Aldrin");
+    strcpy(students[4].status, "Active");
+    students[4].attendance = 90;
+    strcpy(students[4].schedule, "Regular class");
+    students[4].balance = 2000.0;
+    
+    strcpy(students[5].id, "ED-470254");
+    strcpy(students[5].name, "Magpayo, Arwin");
+    strcpy(students[5].status, "Active");
+    students[5].attendance = 90;
+    strcpy(students[5].schedule, "Regular class");
+    students[5].balance = 2000.0;
+    
+    strcpy(students[6].id, "CS-243934");
+    strcpy(students[6].name, "Reyes, Meljine");
+    strcpy(students[6].status, "Active");
+    students[6].attendance = 90;
+    strcpy(students[6].schedule, "Regular class");
+    students[6].balance = 2000.0;
+    
+    strcpy(students[7].id, "CS-174396");
+    strcpy(students[7].name, "Alcober, Emmanuel");
+    strcpy(students[7].status, "Active");
+    students[7].attendance = 90;
+    strcpy(students[7].schedule, "Regular class");
+    students[7].balance = 2000.0;
+    
+    strcpy(students[8].id, "OA-171223");
+    strcpy(students[8].name, "Cornejo, Marlon");
+    strcpy(students[8].status, "Active");
+    students[8].attendance = 90;
+    strcpy(students[8].schedule, "Regular class");
+    students[8].balance = 2000.0;
+
+    totalStudents = 9; // Start with just one test student
 }
 
 void registrarMenu() {
@@ -3706,4 +3753,5 @@ faculty_Schedules:
         Sleep(2000);
         Schedules_Faculty_Admin();
 	}
+    
 }
