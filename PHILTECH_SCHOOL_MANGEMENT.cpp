@@ -388,31 +388,122 @@ void hidecursor() {
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
+// Function to print a line of characters
+void print(int b, char a)
+{
+    for (int uuu = 0; uuu < b; ++uuu)
+        putchar(a);
+}
+
+// Function to set console text color
+void setConsoleColor(int color)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 0x4 | 0x7);
+}
+
 void loading_screen() {
-	hidecursor();
-    char symbols[] = { '|', '/', '-', '\\' };
-    	int progress = 0;
-    	
-    	system("cls");
-    	while (progress <= 100) {
-    		gotoxy(50, 15);
-        	printf("\r\t\t\t\tLOADING: %3d%% [", progress);
-        
-        	for (int i = 0; i < 20; i++) {
-        	    if (i < progress / 5) {
-            	    printf("#");
-           	 } else {
-            	    printf(" ");
-           	 }
-        	}
+    // Clear the console screen
+    system("cls");
+    char a = 178; // Block character for loading bar
+    int z;
+    float l = 1.5; // Percentage counter
 
-        	printf("] %c", symbols[progress % 4]);
-        	fflush(stdout);
-        
-        	progress += 5;
+    srand(time(0)); // Seed for random number generation
 
-        	usleep(50000);
-    	}
+    for (int i = 0; i < 75; ++i)
+    {
+        system("cls");
+        printf("\n\n\n\n\n\n\n\n");
+        z = 30 + rand() % (31); // Random sleep duration between 30 and 60ms
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\tLOADING %.0f %%\n\n", l);
+
+        setConsoleColor;
+
+        // Top border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(201);
+        print(76, 205);
+        putchar(187);
+        putchar('\n');
+
+        // Fill the box with loading bars and empty spaces
+        for (int row = 0; row < 4; ++row) {
+            printf("\t\t\t\t\t");
+            putchar(186);
+            putchar(' ');
+            print(i, a);
+            print(75 - i, ' ');
+            putchar(186);
+            putchar('\n');
+        }
+
+        // Bottom border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(200);
+        print(76, 205);
+        putchar(188);
+
+        // Reset console text color to default
+        setConsoleColor;
+
+        printf("\n\n\t\t\t\t\t\t\t\t  WELCOME TO PHILTECH PORTAL");
+        l = l + 1.33333333; // Increment the loading percentage
+        Sleep(10); // Delay for animation
+    }
+}
+
+void loading_screen_general() {
+	// Clear the console screen
+    system("cls");
+
+    char a = 178; // Block character for loading bar
+    int z;
+    float l = 1.5; // Percentage counter
+
+    srand(time(0)); // Seed for random number generation
+
+    for (int i = 0; i < 75; ++i)
+    {
+        system("cls");
+        
+        printf("\n\n\n\n\n\n\n\n");
+        z = 30 + rand() % (31); // Random sleep duration between 30 and 60ms
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\tLOADING %.0f %%\n\n", l);
+
+        // Set console text color to green
+        setConsoleColor;
+
+        // Top border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(201);
+        print(76, 205);
+        putchar(187);
+        putchar('\n');
+
+        // Fill the box with loading bars and empty spaces
+        for (int row = 0; row < 4; ++row) {
+            printf("\t\t\t\t\t");
+            putchar(186);
+            putchar(' ');
+            print(i, a);
+            print(75 - i, ' ');
+            putchar(186);
+            putchar('\n');
+        }
+
+        // Bottom border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(200);
+        print(76, 205);
+        putchar(188);
+
+        // Reset console text color to default
+        setConsoleColor;
+        
+        l = l + 1.33333333; // Increment the loading percentage
+        Sleep(10); // Delay for animation
+    }
 }
 
 void generateId(const char* role, const char* department) {
@@ -573,30 +664,7 @@ void saveScheduleToFile() {
 
 int main() {
     hidecursor();
-    char symbols[] = { '|', '/', '-', '\\' };
-    	int progress = 0;
-    	
-    	system("cls");
-    	while (progress <= 100) {
-    		gotoxy(50, 15);
-        	printf("\r\t\t\t\tLOADING: %3d%% [", progress);
-        
-        	for (int i = 0; i < 20; i++) {
-        	    if (i < progress / 5) {
-            	    printf("#");
-           	 } else {
-            	    printf(" ");
-           	 }
-        	}
-
-        	printf("] %c", symbols[progress % 4]);
-        	fflush(stdout);
-        
-        	progress += 5;
-
-        	usleep(50000);
-    	}
-    	loginPage();
+    loginPage();
     return 0;
 }
 
@@ -967,78 +1035,83 @@ successful:
 int loginPage() {
     char loginEmail[50], loginPassW[50], loginId[20];
     char storedRole[20], storedMajor[50];
-
+    int attempt = 0;
+    int maxAttempts = 3; // Limit the number of attempts
+    
+    while (attempt < maxAttempts) { // Add a loop to allow retries if invalid input
     system("cls"); // for clear console
     printf("\n\n\n\n\n\n");
-	printf("                                                         PHILIPPINE TECHNOLOGICAL INSTITUTE\n");
-	printf("                                                              OF SCIENCE ARTS AND TRADE\n");
-	printf("                                                                     P O R T A L\n");
-	printf("                                                        +-----------------------------------+\n");
-	printf("                                                        |              SIGN IN              |\n");
-	printf("                                                        +-----------------------------------+\n");
-	printf("                                                                          [1] Create account\n\n");
-	printf("                                                        Enter your email:\n");
-	printf("                                                         -----------------------------------\n");
-	printf("                                                        |                                   |\n");
-	printf("                                                         -----------------------------------\n");
-	printf("\033[2A\033[58C"); // to move up the cursor
+    system("color 4E");
+    printf("                                                         PHILIPPINE TECHNOLOGICAL INSTITUTE\n");
+    printf("                                                              OF SCIENCE ARTS AND TRADE\n");
+    printf("                                                                     P O R T A L\n");
+    printf("                                                        +-----------------------------------+\n");
+    printf("                                                        |              SIGN IN              |\n");
+    printf("                                                        +-----------------------------------+\n");
+    printf("                                                                          [1] Create account\n\n");
+    printf("                                                        Enter your email:\n");
+    printf("                                                         -----------------------------------\n");
+    printf("                                                        |                                   |\n");
+    printf("                                                         -----------------------------------\n");
+    printf("\033[2A\033[58C"); // to move up the cursor
     scanf(" %[^\n]", loginEmail);
-    if (strcmp(loginEmail, "1") == 0) { 
-    createAccount(); // if user input 1, the program teleport to create account function
-	} 
-	
-	printf("\n\n                                                        Enter your password:\n");
-	printf("                                                         -----------------------------------\n");
-	printf("                                                        |                                   |\n");
-	printf("                                                         -----------------------------------\n");
-	printf("\033[2A\033[58C"); // to move up the cursor
-    scanf(" %[^\n]", loginPassW);
     
+    if (strcmp(loginEmail, "1") == 0) { 
+        createAccount(); // if user input 1, the program goes to create account function
+    } 
+
+    printf("\n\n                                                        Enter your password:\n");
+    printf("                                                         -----------------------------------\n");
+    printf("                                                        |                                   |\n");
+    printf("                                                         -----------------------------------\n");
+    printf("\033[2A\033[58C"); // to move up the cursor
+    scanf(" %[^\n]", loginPassW);
+        
     printf("\n\n                                                        Enter your No. ID:\n");
-	printf("                                                         -----------------------------------\n");
-	printf("                                                        |                                   |\n");
-	printf("                                                         -----------------------------------\n");
-	printf("\033[2A\033[58C"); // to move up the cursor
+    printf("                                                         -----------------------------------\n");
+    printf("                                                        |                                   |\n");
+    printf("                                                         -----------------------------------\n");
+    printf("\033[2A\033[58C"); // to move up the cursor
     scanf(" %[^\n]", loginId);
 
-    if (verifyLogin(loginEmail, loginPassW, loginId, storedRole, storedMajor)) { // call the verifyLogin function and variable
-        if (strcmp(storedRole, "Professor") == 0) { // Compare the value of variable to String value
-        	strcpy(Position, "Faculty"); // to add specific value for Position var
-            printf("\n\n                                                         Successfully logged in as professor!\n");
-            printf("                                                         Press any key to continue...");
-            getch();
-            profMenu(); // teleport to Faculty Dashboard
+    if (verifyLogin(loginEmail, loginPassW, loginId, storedRole, storedMajor)) { // call the verifyLogin function
+        if (strcmp(storedRole, "Professor") == 0) {
+            strcpy(Position, "Faculty");
+            loading_screen();
+            profMenu();
         } else if (strcmp(storedRole, "Student") == 0) {
-        	strcpy(Position, "Student"); // to add specific value for Position var
-            printf("\n\n                                                         Successfully logged in as student!\n");
-            printf("                                                         Press any key to continue...");
-            getch();
-            studentMenu(); // teleport to Student Dashboard
+            strcpy(Position, "Student");
+            loading_screen();
+            studentMenu();
         } else if (strcmp(storedRole, "Admin") == 0) {
-            printf("\n\n                                                         Successfully logged in as staff!\n");
-            printf("                                                         Press any key to continue...");
-            getch();
+            loading_screen();
             if (strcmp(storedMajor, "Registrar") == 0) {
-            	strcpy(Position, "Registrar"); // to add specific value for Position var
-            	registrarMenu(); // teleport to Registrar Dashboard
-			} else if (strcmp(storedMajor, "Administration") == 0) {
-				strcpy(Position, "Administration"); // to add specific value for Position var
-				adminMenu(); // teleport to Administration Dashboard
-			}
-    	} else {
-    		system("cls");
-        	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        	printf("                                                       __-----_---__-----__-_---_-__----_-__--_-__\n");
-			printf("                                                      |  _______________________________________  |\n");
-			printf("                                                      |:|               INVALID!!!!             |:|\n");
-			printf("                                                      |:|    > Email, Password or ID Number <   |:|\n");
-			printf("                                                      |:|_______________________________________|:|\n");
-			printf("                                                      |__-_-_---___----__--_--__-_____----___--___|\n");
-        	Sleep(1000); // Show error for 1 second
-        	loginPage(); // return to the Login Page
-    	}
+                strcpy(Position, "Registrar");
+                registrarMenu();
+            } else if (strcmp(storedMajor, "Administration") == 0) {
+                strcpy(Position, "Administration");
+                adminMenu();
+            }
+        }
+        return 0; // If login is successful, exit the function
+    } else {
+        system("cls");
+        printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        printf("                                                       __-----_---__-----__-_---_-__----_-__--_-__\n");
+        printf("                                                      |  _______________________________________  |\n");
+        printf("                                                      |:|               INVALID!!!!             |:|\n");
+        printf("                                                      |:|    > Email, Password or ID Number <   |:|\n");
+        printf("                                                      |:|_______________________________________|:|\n");
+        printf("                                                      |__-_-_---___----__--_--__-_____----___--___|\n");
+        Sleep(1000); // Show error for 1 second
+        attempt++; // Increment the number of attempts
+        if (attempt >= maxAttempts) {
+            printf("\n\nExceeded maximum number of attempts. Exiting...\n");
+            exit(0); // Exit the program after max attempts are reached
+            }
+        }
+    }
     return 0;
-	}
 }
 
 void account_Details() {
@@ -1078,7 +1151,9 @@ personal_Information:
 	
 	switch (choose) {
 		case '2': goto inbox_Page; break; // teleport to inbox page
-		case '0': loginPage(); // return to login page
+		case '0': 
+			loading_screen_general();
+			loginPage(); // return to login page
 		case '9':
 			if (strcmp(Position, "Faculty") == 0) { // Compare the value of variable to string value
             	profMenu(); // teleport to Faculty Dashboard
@@ -1158,6 +1233,7 @@ inbox_Page: // same explanation for Personal details field
 void studentMenu() {
 	char user;
     system("cls");
+    system("color 4E");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                                                                                      |\n");
     printf("                  |                                                   P H I L T E C H                                                    |\n");
@@ -1448,6 +1524,8 @@ void viewSchedule() {
 				}
 				
                 Class_schedule_BSCS_Sunday: // same explanation for BSCS schedule
+                while(1) {
+                	char user3;
                 	system("cls");
 					view_schedule_Header();
 					printf("\n                                                 _________________________________________________________\n");
@@ -1480,9 +1558,15 @@ void viewSchedule() {
 					printf("                                                |:|    4:00-4:45    |          MR. RAMIZARES            |:|\n");
 					printf("                                                |:|_________________|___________________________________|:|\n");
 					printf("                                                |_________________________________________________________|\n");
-					return;
+					user3 = getch();
+					if (user3 == '9') {
+						studentMenu();
+    				}
+				}
 					
 				Class_schedule_BSOA_Sunday: // same explanation for BSCS schedule
+				while (1) {
+					char user4;
 					system("cls");
 					view_schedule_Header();
 					printf("\n                                                 _________________________________________________________\n");
@@ -1515,9 +1599,15 @@ void viewSchedule() {
 					printf("                                                |:|    4:00-4:45    |            MR. MATILA             |:|\n");
 					printf("                                                |:|_________________|___________________________________|:|\n");
 					printf("                                                |_________________________________________________________|\n");
-					return;
+					user4 = getch();
+					if (user4 == '9') {
+						studentMenu();
+    				}
+    			}
 					
 				Class_schedule_BTVTED_Sunday: // same explanation for BSCS schedule
+				while (1) {
+					char user5;
 					system("cls");
 					view_schedule_Header();
 					printf("\n                                                 _________________________________________________________\n");
@@ -1550,7 +1640,11 @@ void viewSchedule() {
 					printf("                                                |:|    4:00-4:45    |           MR. RAMIZARES           |:|\n");
 					printf("                                                |:|_________________|___________________________________|:|\n");
 					printf("                                                |_________________________________________________________|\n");
-					return;
+					user5 = getch();
+					if (user5 == '9') {
+						studentMenu();
+    				}
+    			}
             }
             break;
         }
@@ -1656,42 +1750,71 @@ Submmiting_Request: // Loading bar for submmiting Process
     	goto Process_loading;
 
 Process_loading:
-		char symbols[] = { '|', '/', '-', '\\' };
-    	int progress = 0;
-    	
-    	system("cls");
-    	while (progress <= 100) {
-    		gotoxy(50, 15);
-        	printf("\r\t\t\t\tProcessing Request: %3d%% [", progress);
-        
-        	for (int i = 0; i < 20; i++) {
-        	    if (i < progress / 5) {
-            	    printf("#");
-           	 } else {
-            	    printf(" ");
-           	 }
-        	}
+		// Clear the console screen
+    system("cls");
 
-        	printf("] %c", symbols[progress % 4]);
-        	fflush(stdout);
-        
-        	progress += 5;
+    char a = 178; // Block character for loading bar
+    int z;
+    float l = 1.5; // Percentage counter
 
-        	usleep(200000);
-    	}
+    srand(time(0)); // Seed for random number generation
+
+    for (int i = 0; i < 75; ++i)
+    {
+        system("cls");
+        
+        printf("\n\n\n\n\n\n\n\n");
+        z = 30 + rand() % (31); // Random sleep duration between 30 and 60ms
+        printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\tLOADING %.0f %%\n\n", l);
+
+        // Set console text color to green
+        setConsoleColor;
+
+        // Top border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(201);
+        print(76, 205);
+        putchar(187);
+        putchar('\n');
+
+        // Fill the box with loading bars and empty spaces
+        for (int row = 0; row < 4; ++row) {
+            printf("\t\t\t\t\t");
+            putchar(186);
+            putchar(' ');
+            print(i, a);
+            print(75 - i, ' ');
+            putchar(186);
+            putchar('\n');
+        }
+
+        // Bottom border of the loading box
+        printf("\t\t\t\t\t");
+        putchar(200);
+        print(76, 205);
+        putchar(188);
+
+        // Reset console text color to default
+        setConsoleColor;
+        
+        printf("\n\n\t\t\t\t\t\t\t\t    PROCESSING REQUEST");
+        l = l + 1.33333333; // Increment the loading percentage
+        Sleep(10); // Delay for animation
+    }
     	
-    	if (strcmp(profMajor, "BS Computer Science") == 0) { // check if the value of profMajor is equal to the value of string
-            goto BSCS_EOG_receipt; // if yes tp to BSCS eog Receipt
-		} else if (strcmp(profMajor, "BS Office Administration") == 0) {
-			goto BSOA_EOG_receipt;
-		} else if (strcmp(profMajor, "BTVTEd") == 0 ) {
-			goto BTVTED_EOG_receipt;
-		}
+    if (strcmp(profMajor, "BS Computer Science") == 0) { // check if the value of profMajor is equal to the value of string
+        goto BSCS_EOG_receipt; // if yes tp to BSCS eog Receipt
+	} else if (strcmp(profMajor, "BS Office Administration") == 0) {
+		goto BSOA_EOG_receipt;
+	} else if (strcmp(profMajor, "BTVTEd") == 0 ) {
+		goto BTVTED_EOG_receipt;
+	}
     	
 BSCS_EOG_receipt:
 	while (1) { // to prevent any invalid input, infinite loop
 	char user;
 	system("cls");
+	system("color 4E");
 	eog_request_Header();
 	printf("\n\n                        Dear: %s\n\n", Fullname);
     printf("                        In response to your request, Below the detailed marks for the 1st Semester and 2nd Semester\n");
@@ -1745,14 +1868,15 @@ BSOA_EOG_receipt:
 	while (1) {
 	char user1;
 	system("cls");
+	system("color 4E");
 	eog_request_Header();
 	printf("\n\n                        Dear: %s\n\n", Fullname);
     printf("                        In response to your request, Below the detailed marks for the 1st Semester and 2nd Semester\n");
     printf("                        of Academic year %s\n", eogSY);
 	printf("\n                            ___________________________________________________________________________________________________\n");
     printf("                           |  _______________________________________________________________________________________________  |\n");
-	printf("                           |:|  Name: %-61s Student No.: %-11s |:|\n");
-	printf("                           |:|  Course: %-59s Section: %-15s |:|\n");
+	printf("                           |:|  Name: %-61s Student No.: %-11s |:|\n", Fullname, idNumber); // display the value of the var
+	printf("                           |:|  Course: %-59s Section: %-15s |:|\n", profMajor, section);
 	printf("                           |:|-----------------------------------------------------------------------------------------------|:|\n");
 	printf("                           |:|     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |:|\n");
     printf("                           |:|-----------------------------------------------------------------------------------------------|:|\n");
@@ -1795,14 +1919,15 @@ BTVTED_EOG_receipt:
 	while (1) {
 	char user2;
 	system("cls");
+	system("color 4E");
 	eog_request_Header();
 	printf("\n\n                        Dear: %s\n\n", Fullname);
     printf("                        In response to your request, Below the detailed marks for the 1st Semester and 2nd Semester\n");
     printf("                        of Academic year %s\n", eogSY);
 	printf("\n                            ___________________________________________________________________________________________________\n");
     printf("                           |  _______________________________________________________________________________________________  |\n");
-	printf("                           |:|  Name: %-61s Student No.: %-11s |:|\n");
-	printf("                           |:|  Course: %-59s Section: %-15s |:|\n");
+	printf("                           |:|  Name: %-61s Student No.: %-11s |:|\n", Fullname, idNumber); // display the value of the var
+	printf("                           |:|  Course: %-59s Section: %-15s |:|\n", profMajor, section);
 	printf("                           |:|-----------------------------------------------------------------------------------------------|:|\n");
 	printf("                           |:|     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |:|\n");
     printf("                           |:|-----------------------------------------------------------------------------------------------|:|\n");
@@ -1882,13 +2007,13 @@ void enrollMent() {
         case '1': 
             strcpy(scheduleType, "Regular Class"); // Add a specific value for 'scheduleType' variable
             saveScheduleToFile(); // save the new value in the database
-            loading_screen(); // call loading screen function
+            loading_screen_general(); // call loading screen function
             goto Confirmation_details; // after that teleport to confirmation details
             break;
         case '2':
             strcpy(scheduleType, "Sunday Class"); // Add a specific value for scheduleType variable
             saveScheduleToFile();
-            loading_screen();
+            loading_screen_general();
             goto Confirmation_details;
             break;
         case '9':
@@ -1964,6 +2089,7 @@ Confirmation_details:
 void profMenu() {
 	char choose;
     system("cls");
+    system("color 4E");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                                                                                      |\n");
     printf("                  |                                                   P H I L T E C H                                                    |\n");
@@ -2986,7 +3112,15 @@ void student_Records_Registrar() {
                 break;
             }
             case '9':
-            	registrarMenu();
+            	if (strcmp(Position, "Faculty") == 0) {  // check if Position value is equal to string value
+            		profMenu(); // tp to Faculty Dashboard
+        		} else if (strcmp(Position, "Registrar") == 0) {
+            		registrarMenu();
+        		} else if (strcmp(Position, "Administration") == 0) {
+        			adminMenu();
+				} else if (strcmp(Position, "Student") == 0 ) {
+					studentMenu();
+				} 
             	break;
             default: 
             	system("cls");
@@ -3040,29 +3174,85 @@ void attendance_Record_Registrar() {
 // Given faculty data for registrar
 void add_test_data_Faculty() {
     strcpy(faculty[0].id, "FAC-124569");
-    strcpy(faculty[0].name, "Mr. JIMINEZ");
-    strcpy(faculty[0].subject, "CC112");
+    strcpy(faculty[0].name, "Mr. Atienza, Michael");
+    strcpy(faculty[0].subject, "PATHFIT1");
     faculty[0].attendance = 98;
     strcpy(faculty[0].schedule, "Full-time");
     faculty[0].salary = 30000.0;
     
     strcpy(faculty[1].id, "FAC-175468");
-    strcpy(faculty[1].name, "Mr. V. GORDON");
+    strcpy(faculty[1].name, "Mr. Gordon, Raiven");
     strcpy(faculty[1].subject, "CC111");
     faculty[1].attendance = 98;
     strcpy(faculty[1].schedule, "Full-time");
     faculty[1].salary = 30000.0;
     
-    // Add more test students...
-    // (keeping the same test data as your original code)
-    totalFaculty = 2; // Start with just one test student
+    strcpy(faculty[2].id, "FAC-114296");
+    strcpy(faculty[2].name, "Mr. Jiminez, Carl Joseph");
+    strcpy(faculty[2].subject, "CC112");
+    faculty[2].attendance = 98;
+    strcpy(faculty[2].schedule, "Full-time");
+    faculty[2].salary = 30000.0;
+    
+    strcpy(faculty[3].id, "FAC-151578");
+    strcpy(faculty[3].name, "Mr. Nori, Lacerna");
+    strcpy(faculty[3].subject, "RPH1");
+    faculty[3].attendance = 98;
+    strcpy(faculty[3].schedule, "Full-time");
+    faculty[3].salary = 30000.0;
+    
+    strcpy(faculty[4].id, "FAC-164344");
+    strcpy(faculty[4].name, "Mr. Ramizares, John");
+    strcpy(faculty[4].subject, "CC112");
+    faculty[4].attendance = 98;
+    strcpy(faculty[4].schedule, "Part-time");
+    faculty[4].salary = 15000.0;
+    
+    strcpy(faculty[5].id, "FAC-178151");
+    strcpy(faculty[5].name, "Mr. Rodriguez, Jude");
+    strcpy(faculty[5].subject, "MATH1");
+    faculty[5].attendance = 98;
+    strcpy(faculty[5].schedule, "Part-time");
+    faculty[5].salary = 15000.0;
+    
+    strcpy(faculty[6].id, "FAC-120052");
+    strcpy(faculty[6].name, "Mr. Rosales, Paul");
+    strcpy(faculty[6].subject, "UTS1");
+    faculty[6].attendance = 98;
+    strcpy(faculty[6].schedule, "Part-time");
+    faculty[6].salary = 15000.0;
+    
+    strcpy(faculty[7].id, "FAC-176220");
+    strcpy(faculty[7].name, "Mr. Patalen, Francis Jun");
+    strcpy(faculty[7].subject, "CC114");
+    faculty[7].attendance = 98;
+    strcpy(faculty[7].schedule, "Part-time");
+    faculty[7].salary = 15000.0;
+    
+    strcpy(faculty[8].id, "FAC-182422");
+    strcpy(faculty[8].name, "Mr. Vele, Allan");
+    strcpy(faculty[8].subject, "UTS1");
+    faculty[8].attendance = 98;
+    strcpy(faculty[8].schedule, "Part-time");
+    faculty[8].salary = 15000.0;
+    
+    strcpy(faculty[9].id, "FAC-196445");
+    strcpy(faculty[9].name, "Ms. Yabut, Edith");
+    strcpy(faculty[9].subject, "FIL101");
+    faculty[9].attendance = 98;
+    strcpy(faculty[9].schedule, "Full-time");
+    faculty[9].salary = 30000.0;
+    
+    totalFaculty = 10;
 }
 
 void adminMenu() {
     char choose;
     add_test_data_Faculty(); // insert the given student data
+    add_test_data();
     
     system("cls");
+    system("color 4E");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                                                                                      |\n");
     printf("                  |                                                   P H I L T E C H                                                    |\n");
@@ -3651,7 +3841,7 @@ faculty_Schedules:
 	printf("                     |:|-----------------------------------------------------------------------------------------------------------|:|\n");
 	printf("                     |:|  6  |  [Y] MR. RAMIZARES, JOHN                                              |         PART-TIME           |:|\n");
 	printf("                     |:|-----------------------------------------------------------------------------------------------------------|:|\n");
-	printf("                     |:|  7  |  [A] MS. RODRIGUEZ, JUDE                                              |         PART-TIME           |:|\n");
+	printf("                     |:|  7  |  [A] MR. RODRIGUEZ, JUDE                                              |         PART-TIME           |:|\n");
 	printf("                     |:|-----------------------------------------------------------------------------------------------------------|:|\n");
 	printf("                     |:|  8  |  [S] MR. ROSALES, PAUL                                                |         PART-TIME           |:|\n");
 	printf("                     |:|-----------------------------------------------------------------------------------------------------------|:|\n");
