@@ -676,8 +676,8 @@ int createAccount() {
     	printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     	printf("                  |                                                   PHILTECH GATEWAY                                                   |\n");
     	printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    	printf("                  |                                * --------------------- / ------------- / ----------- /                               |\n");
-    	printf("                  |                      Personal Information    Account information     Payment     Confirmation                        |\n");
+    	printf("                  |                                       * --------------------- / ---------------- /                       [ 9 ] Back  |\n");
+    	printf("                  |                              Personal Information     Account information     Position                               |\n");
     	printf("                  +----------------------------------------------------------------------------------------------------------------------+\n\n");
         
     	printf("                                                                   Personal Information\n\n");
@@ -689,6 +689,10 @@ int createAccount() {
     	printf("                                  ------------------------------------------------------------------------------------------\n");
     	printf("\033[2A\033[35C");
     	scanf(" %[^\n]", firstN);
+    	
+    	if (strcmp(firstN, "9") == 0) { // check if user, input no.9
+    		loginPage(); // if yes return to Login Page
+		}
     
     	if (strlen(firstN) < 2) {
             printf("\n                            (System): Name is too short! Must be at least 2 characters.\n");
@@ -781,13 +785,15 @@ int createAccount() {
 
 account_info:
 	char user2;
+	int i = 0;
+    char ch;
     while (1) {  
     system("cls");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                   PHILTECH GATEWAY                                                   |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  |                                * --------------------- * ------------- / ----------- /                               |\n");
-    printf("                  |                      Personal Information    Account information     Payment     Confirmation                        |\n");
+    printf("                  |                                       * --------------------- / ---------------- /                       [ 9 ] Back  |\n");
+    printf("                  |                              Personal Information     Account information     Position                               |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n\n");
         
     printf("                                                                    Account Information\n\n");
@@ -845,7 +851,17 @@ account_info:
     	printf("                                 |                                                                                          |\n");
     	printf("                                  ------------------------------------------------------------------------------------------\n");
     	printf("\033[2A\033[35C");
-    	scanf("%s", passW);
+    	
+    	while ((ch = getch()) != '\r') { // Stop input when Enter is pressed
+        	if (ch == '\b' && i > 0) { // Handle backspace
+          	  i--;
+            	printf("\b \b");
+        	} else if (ch != '\b' && i < sizeof(passW) - 1) {
+            	passW[i++] = ch;
+            	printf("*");
+        	}
+    	}
+    	passW[i] = '\0'; // Null-terminate the password
     	
     	if (strlen(passW) < 8) {
             printf("\n                            (System): Password too short! Must be at least 8 characters\n");
@@ -884,8 +900,8 @@ position_choices:
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                   PHILTECH GATEWAY                                                   |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  |                                * --------------------- * ------------- * ----------- /                               |\n");
-    printf("                  |                      Personal Information    Account information   Position     Confirmation                         |\n");
+    printf("                  |                                       * --------------------- / ---------------- /                       [ 9 ] Back  |\n");
+    printf("                  |                              Personal Information     Account information     Position                               |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n\n");
         
     printf("                                                                         Position\n\n");
@@ -1035,6 +1051,8 @@ successful:
 int loginPage() {
     char loginEmail[50], loginPassW[50], loginId[20];
     char storedRole[20], storedMajor[50];
+    int i = 0;
+    char ch;
     int attempt = 0;
     int maxAttempts = 3; // Limit the number of attempts
     
@@ -1065,9 +1083,19 @@ int loginPage() {
     printf("                                                        |                                   |\n");
     printf("                                                         -----------------------------------\n");
     printf("\033[2A\033[58C"); // to move up the cursor
-    scanf(" %[^\n]", loginPassW);
+    
+    while ((ch = getch()) != '\r') { // stop input when Enter is pressed
+        if (ch == '\b' && i > 0) { // handle backspace
+            i--;
+            printf("\b \b");
+        } else if (ch != '\b' && i < sizeof(loginPassW) - 1) { // limit the password length
+            loginPassW[i++] = ch;
+            printf("*"); // display an asterisk (*) for each character
+        }
+    }
+    loginPassW[i] = '\0'; // mark the end of the password so the computer knows where it stops.
         
-    printf("\n\n                                                        Enter your No. ID:\n");
+    printf("\n\n\n                                                        Enter your No. ID:\n");
     printf("                                                         -----------------------------------\n");
     printf("                                                        |                                   |\n");
     printf("                                                         -----------------------------------\n");
@@ -1378,7 +1406,7 @@ void viewSchedule() {
 		printf("                                                      |__-_-_---___----__--_--__-_____----___--___|\n");
         printf("                                                                 Press any key to return...");
         getch();
-        return;
+        studentMenu();
     }
     
     while (fgets(line, sizeof(line), file)) { // stored the value, inside the database
@@ -1977,7 +2005,7 @@ void enrollMent() {
     printf("                  |                                                     P H I L T E C H                                                  |\n");
     printf("                  |                                                                                                                      |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  | Name: %-40s E N R O L L M E N T                                    [ 9 ] Settings |\n", userN);
+    printf("                  | Name: %-40s    E N R O L L M E N T                                     [ 9 ] Back |\n", userN);
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |__-____--____-----___--____------___----_____---_---_---____-____-____--____------__--____-----___----_____---____--__|\n\n");
     
@@ -2036,7 +2064,7 @@ Confirmation_details:
     printf("                  |                                                     P H I L T E C H                                                  |\n");
     printf("                  |                                                                                                                      |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  | Name: %-40s E N R O L L M E N T                                    [ 9 ] Settings |\n", userN);
+    printf("                  | Name: %-40s    E N R O L L M E N T                                     [ 9 ] Back |\n", userN);
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |__-____--____-----___--____------___----_____---_---_---____-____-____--____------__--____-----___----_____---____--__|\n\n");
     
@@ -2785,6 +2813,7 @@ void registrarMenu() {
 }
 
 void student_Records_Registrar() {
+	student_record_page:
     char choice;
     char temp[50]; // temporary student ID
     
@@ -2842,8 +2871,7 @@ void student_Records_Registrar() {
 				sprintf(students[totalStudents].id, "%s", temp);
 				
 				if (strcmp(temp, "9") == 0) {
-    			student_Records_Registrar();
-    			return;
+    			 	goto student_record_page;
 				}
 
 				printf("\n                                 Enter Name:\n");
@@ -2912,7 +2940,6 @@ void student_Records_Registrar() {
 				
 				if (strcmp(temp, "9") == 0) {
     			student_Records_Registrar();
-    			return;
 				}
 
 				for(int i = 0; i < totalStudents; i++) {
@@ -3021,7 +3048,6 @@ void student_Records_Registrar() {
 				
 				if (strcmp(temp, "9") == 0) {
     			student_Records_Registrar();
-    			return;
 				}
                 
                 for(int i = 0; i < totalStudents; i++) {
@@ -3052,6 +3078,7 @@ void student_Records_Registrar() {
 				
                 printf("");
                 getch();
+                student_Records_Registrar();
                 break;
             }
                 
@@ -3166,7 +3193,7 @@ void attendance_Record_Registrar() {
 			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 			invalid_Display();
 			printf("\t\t\t\t\t\t\t\tPress any key to return...");
-    		getch();
+    		Sleep(1000); // show error for 1 sec
     		registrarMenu();
 		}
 }
