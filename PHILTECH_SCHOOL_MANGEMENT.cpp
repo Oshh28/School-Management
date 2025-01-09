@@ -512,8 +512,8 @@ void generateId(const char* role, const char* department) {
     int randomNum = rand() % 900000 + 100000; // 6-digit number
 
     if (strcmp(role, "Student") == 0) {
-        if (strstr(department, "Computer Science") != NULL) {
-            strcpy(prefix, "CS");
+        if (strstr(department, "Computer Science") != NULL) { // check if the var 'department' is equal to to given string value
+            strcpy(prefix, "CS"); // if match the value, save the given Student ID
         } else if (strstr(department, "Office Admin") != NULL) {
             strcpy(prefix, "OA");
         } else if (strstr(department, "Teacher") != NULL) {
@@ -523,7 +523,7 @@ void generateId(const char* role, const char* department) {
         strcpy(prefix, "FAC");
     } 
     
-	if (strcmp(role, "Admin") == 0) {
+	if (strcmp(role, "Admin") == 0) { 
         if (strstr(department, "Registrar") != NULL) {
             strcpy(prefix, "REG");
         } else if (strstr(department, "Administration") != NULL) {
@@ -568,7 +568,7 @@ int checkSection(char section[]) {
 }
 
 void saveUserToFile() {
-    FILE *file = fopen("users_info.txt", "a");
+    FILE *file = fopen("users_info.txt", "a"); // open users_info.txt file as Appends
     if (file == NULL) {
         printf("\t\t\t(System): Error opening database file!\n");
         return;
@@ -579,16 +579,16 @@ void saveUserToFile() {
 }
 
 int checkUserExists(const char *checkEmail) {
-    FILE *file = fopen("users_info.txt", "r");
-    if (file == NULL) return 0;
+    FILE *file = fopen("users_info.txt", "r"); // open users_info.txt read only
+    if (file == NULL) return 0; // if users_info.txt is not exist return to main manu
 
-    char line[500];
-    char storedEmail[50];
+    char line[500]; // lenght of lines in database
+    char storedEmail[50]; //
     while (fgets(line, sizeof(line), file)) {
         sscanf(line, "%[^|]", storedEmail);
-        if (strcmp(storedEmail, checkEmail) == 0) {
-            fclose(file);
-            return 1;
+        if (strcmp(storedEmail, checkEmail) == 0) { // check if match the value inside the database
+            fclose(file); // close
+            return 1; 
         }
     }
     fclose(file);
@@ -643,8 +643,8 @@ int verifyLogin(const char *loginEmail, const char *password, const char *loginI
 }
 
 void saveScheduleToFile() {
-    FILE *file = fopen("schedules.txt", "a");
-    if (file == NULL) {
+    FILE *file = fopen("schedules.txt", "a"); // open schedules.txt database as Appends view
+    if (file == NULL) { // if schedules.txt file not exist show the error
         printf("\n                                  (System): Error opening schedule database!\n");
         return;
     }
@@ -792,7 +792,7 @@ account_info:
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                   PHILTECH GATEWAY                                                   |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  |                                       * --------------------- / ---------------- /                       [ 9 ] Back  |\n");
+    printf("                  |                                       * --------------------- * ---------------- /                       [ 9 ] Back  |\n");
     printf("                  |                              Personal Information     Account information     Position                               |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n\n");
         
@@ -900,7 +900,7 @@ position_choices:
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
     printf("                  |                                                   PHILTECH GATEWAY                                                   |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n");
-    printf("                  |                                       * --------------------- / ---------------- /                       [ 9 ] Back  |\n");
+    printf("                  |                                       * --------------------- * ---------------- *                       [ 9 ] Back  |\n");
     printf("                  |                              Personal Information     Account information     Position                               |\n");
     printf("                  +----------------------------------------------------------------------------------------------------------------------+\n\n");
         
