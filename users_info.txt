@@ -1,0 +1,12 @@
+chris@gmail.com|09077563262|Student|Chrizyruze|Rosal|28/07/2006|09077563262|Chris|BS Computer Science|Male|Blk15 Lot64, BRGY: Delas Alas, GMA Cavite|CS-123684
+Cyruze@gmail.com|09077563262|Professor|Cyruze|Rosal|28/07/2006|09077563262|Zyy|Teacher Education Department|Male|Blk15 Lot64 BRGY Delas Alas, GMA CAVITE|FAC-104461
+Kris@gmail.com|09077563262|Admin|Kris|Rosal|28/07/2006|09077563262|Kris|Registrar|Male|Blk15 Lot64 BRGY Delas Alas, GMA CAVITE|REG-105278
+Krez@gmail.com|09077563262|Admin|Krez|Rosal|27/07/2006|09077563262|Krez|Administration|Male|Blk15 Lot64 BRGY Delas Alas, GMA CAVITE|ADM-112338
+joeytaba@gmail.com|joeytaba|Student|emmanuel|alcober|19/02/2002|09091326069|joeytaba|BS Computer Science|Male|yakal|CS-113450
+lorenzyabut7@gmail.com|gagosijoey|Student|lorenz|yabut|15/10/2003|09272726445|lorenzyabut123|BS Computer Science|Male|Home|CS-114495
+navarro.carljoseph@gmail.com|philtech|Professor|Carl Joseph|Jimenez|03/06/1999|09491542506|navarro.carljoseph|Computer Science Department|Male|sa bahay lang|FAC-107192
+delacruz.juan@gmail.com|pogi123pogiako123|Admin|JUAN|DELACRUZ|09/09/1999|09491542506|delacruz.pogi|Registrar|Male|dyan lang|REG-108332
+delacruz.john@gmail.com|pogiako123|Admin|delacruz.john|hotdog|01/01/1888|09491542506|hotdog123|Registrar|Male|dyan lang|REG-109018
+quiboloy123@gmail.com|quib123pogiako123|Admin|Apollo|Quiboloy|08/08/1888|09491542506|quibs123|Administration|Female|dyan lang|ADM-110242
+gordon.leonora@gmail.com|philtech|Admin|Leonora|Gordon|01/01/1888|09491542506|gordon.leonora|Administration|Female|PHILTECH|ADM-110856
+delacruz.marie@gmail.com|philtech|Student|Marie|Delacruz|01/01/1111|09491542506|delacruz.marie|BS Computer Science|Female|#223 Dyan lang|CS-111973
